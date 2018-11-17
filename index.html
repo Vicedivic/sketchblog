@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Sketchy Drawing App</title>
-  <link rel="shortcut icon" type="image/png" href="/favicon.png"/>
+  <link rel="icon" type="image/png" href="/favicon.png"/>
 </head>
 <body>
 <form id="stroketype>" netlify>
@@ -26,7 +26,7 @@
     <label class="option-label" id="width-label" for="width-value">Width</label>
     <input id="width-value" type="range" min="2" max=100">
   </fieldset>
-  <button onclick="clearboard(e)">Clear Board</button>
+  <button onclick="clearboard(event)">Clear Board</button>
   <p id="support">&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbspSupport & Feedback: <a href="mailto:victor@lfpost.dk">victor@lfpost.dk</a></p>
 </form>
 <canvas id="draw" width="800" height="800"></canvas>
@@ -39,15 +39,11 @@
     let changing_width_checkbox = document.querySelector('#changing-width');
     let $width = $('#width-value');
     let width_range = document.querySelector('#width-value');
-    colorpicker.value = 'hsl(1, 100%, 50%)';
+    colorpicker.value = `hsl(1, 100%, 50%)`;
     const canvas = document.querySelector('#draw');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
     canvas.height = (window.innerHeight - 81);
-    /* window.addEventListener("resize", () => {
-        canvas.width = window.innerWidth;
-        canvas.height = (window.innerHeight - 81); */
-
     if (squared_checkbox.checked) {
         ctx.lineCap = 'square';
         ctx.lineJoin = 'round';
@@ -55,7 +51,6 @@
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
     }
-    });
     ctx.lineJoin = 'round'  ;
     ctx.shadowBlur = 100;
     let direction = true;
@@ -178,24 +173,42 @@
         // getting our new offset
         [lastX, lastY] = [e.offsetX, e.offsetY];
     }
-
-    canvas.addEventListener('mousedown touchstart', (e) => {
+    // Mouse events
+    canvas.addEventListener('mousedown', (e) => {
         isDrawing = true;
         [lastX, lastY] = [e.offsetX, e.offsetY];
     });
 
 
-    canvas.addEventListener('mousemove touchmove', draw);
-    canvas.addEventListener('mouseup touchend', () => {
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', () => {
         isDrawing = false;
     });
     canvas.addEventListener('mouseout', () => {
         isDrawing = false;
     });
 
+    // Touch events
+    canvas.addEventListener('touchstart', (e) => {
+        isDrawing = true;
+        [lastX, lastY] = [e.offsetX, e.offsetY];
+    });
+
+    canvas.addEventListener('touchmove', draw);
+    canvas.addEventListener('touchend', () => {
+        isDrawing = false;
+    });
+    canvas.addEventListener('touchcancel', () => {
+        isDrawing = false;
+    })
+
+    let $form = $("form");
+    let $canvas = $("canvas");
+
     function clearboard(e) {
         e.preventDefault()
-        ctx.clearRect(0, $('form').height, canvas.width, (canvas.height - $('form').height));
+        ctx.clearRect(0, 0, $canvas.width(), $canvas.height());
+        console.log($form.height(), $canvas.width(), $canvas.height());
     }
 
     ctx.shadowColor = color;
