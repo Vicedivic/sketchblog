@@ -39,6 +39,8 @@
     let changing_width_checkbox = document.querySelector('#changing-width');
     let $width = $('#width-value');
     let width_range = document.querySelector('#width-value');
+    let $form = $("form");
+    let $canvas = $("canvas");
     colorpicker.value = `hsl(1, 100%, 50%)`;
     const canvas = document.querySelector('#draw');
     const ctx = canvas.getContext('2d');
@@ -161,8 +163,17 @@
         } else {
             color = colorpicker.value;
         }
-
-        ctx.strokeStyle = color;
+        if (e.shiftKey) {
+            ctx.strokeStyle = `#fff`;
+            ctx.lineWidth = 100;
+        } else {
+            ctx.strokeStyle = color;
+            if (changing_width) {
+                fn_changing_width();
+            } else {
+                ctx.lineWidth = width_range.value;
+            }
+        }
         ctx.beginPath();
 
         // start from
@@ -173,9 +184,12 @@
         // getting our new offset
         [lastX, lastY] = [e.offsetX, e.offsetY];
     }
+
     // Mouse events
+
     canvas.addEventListener('mousedown', (e) => {
         isDrawing = true;
+        clickEvent = true;
         [lastX, lastY] = [e.offsetX, e.offsetY];
     });
 
@@ -201,9 +215,6 @@
     canvas.addEventListener('touchcancel', () => {
         isDrawing = false;
     })
-
-    let $form = $("form");
-    let $canvas = $("canvas");
 
     function clearboard(e) {
         e.preventDefault()
@@ -235,6 +246,15 @@
 
   canvas:hover {
     cursor: crosshair;
+  }
+
+  canvas {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   }
 
   button:hover {
