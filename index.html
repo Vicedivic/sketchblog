@@ -41,6 +41,7 @@
     let width_range = document.querySelector('#width-value');
     let $form = $("form");
     let $canvas = $("canvas");
+    const lineWidthIncrease = 1;
     colorpicker.value = `hsl(1, 100%, 50%)`;
     const canvas = document.querySelector('#draw');
     const ctx = canvas.getContext('2d');
@@ -104,9 +105,9 @@
         }
 
         if(direction) {
-            ctx.lineWidth += 2;
+            ctx.lineWidth += lineWidthIncrease;
         } else {
-            ctx.lineWidth -= 2;
+            ctx.lineWidth -= lineWidthIncrease;
         }
     }
 
@@ -138,7 +139,7 @@
 
     function rainbowcolor() {
         color = `hsl(${hue}, 100%, 50%)`;
-        hue++;
+        hue += lineWidthIncrease * 2;
         if (hue >= 360) {
             hue = 0;
         }
@@ -174,6 +175,17 @@
                 ctx.lineWidth = width_range.value;
             }
         }
+
+        if (e.ctrlKey) {
+            ctx.globalCompositeOperation = 'destination-over';
+        } else if (e.altKey) {
+            ctx.globalCompositeOperation = 'multiply';
+        } else if (e.metaKey) {
+            ctx.globalCompositeOperation = 'source-atop'
+        } else {
+            ctx.globalCompositeOperation = 'source-over';
+        }
+
         ctx.beginPath();
 
         // start from
