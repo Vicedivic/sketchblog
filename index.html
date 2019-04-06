@@ -259,8 +259,8 @@
 		var link = document.getElementById('save');
 		    link.innerHTML = 'Download Image';
 		link.addEventListener('click', function(ev) {
-		    link.href = canvas.toDataURL('image/jpeg');
-		    link.download = "mypainting.jpg";
+		    link.href = canvas.toDataURL();
+		    link.download = "mypainting.png";
 		}, false);
 		//document.body.children[0].appendChild(link);
 
