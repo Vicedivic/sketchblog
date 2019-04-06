@@ -196,12 +196,15 @@
         // getting our new offset
         [lastX, lastY] = [e.offsetX, e.offsetY];
     }
+		
+		let mouseDown = false;
 
     // Mouse events
 
     canvas.addEventListener('mousedown', (e) => {
         isDrawing = true;
         clickEvent = true;
+				mouseDown = true;
         [lastX, lastY] = [e.offsetX, e.offsetY];
     });
 
@@ -209,10 +212,17 @@
     canvas.addEventListener('mousemove', draw);
     canvas.addEventListener('mouseup', () => {
         isDrawing = false;
+				mouseDown = false;
     });
-    canvas.addEventListener('mouseout', () => {
-        isDrawing = false;
-    });
+		canvas.addEventListener('mouseout', () => {
+		        isDrawing = false;
+		        canvas.addEventListener('mouseover', (e) => {
+		            if (mouseDown) {
+		                [lastX, lastY] = [e.offsetX, e.offsetY];
+		                isDrawing = true;
+		            }
+		        });
+		    });
 
     // Touch events
     canvas.addEventListener('touchstart', (e) => {
