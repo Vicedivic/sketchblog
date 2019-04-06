@@ -28,6 +28,7 @@
   </fieldset>
   <button onclick="clearboard(event)">Clear Board</button>
   <p id="support">&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbspSupport & Feedback: <a href="mailto:victor@lfpost.dk">victor@lfpost.dk</a></p>
+	<button id="save-button"><a id="save">Save image</a></button>
 </form>
 <canvas id="draw" width="800" height="800"></canvas>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -245,6 +246,23 @@
     }
 
     ctx.shadowColor = color;
+		
+		//let link = document.querySelector('#save-button');
+		//let cnvs = document.getElementById('draw');
+		//link.addEventListener('click', function(ev) {
+		//	ev.preventDefault();
+		//	link.href = cnvs.toDataURL('image/jpeg', 1.0);
+		//	link.download = 'painting.jpg';
+		//	console.log("Successfully downloaded 'painting.jpg'!")
+		//}, false);
+		
+		var link = document.getElementById('save');
+		    link.innerHTML = 'Download Image';
+		link.addEventListener('click', function(ev) {
+		    link.href = canvas.toDataURL('image/jpeg');
+		    link.download = "mypainting.jpg";
+		}, false);
+		//document.body.children[0].appendChild(link);
 
 </script>
 
@@ -265,6 +283,17 @@
     display: inline-grid;
     font-size: 35px;
   }
+	
+	#save-button {
+		position: absolute;
+		right: 10px;
+		margin-top: 10px;
+	}
+	
+	#save {
+		text-decoration: none;
+		color: white;
+	}
 
   canvas:hover {
     cursor: crosshair;
