@@ -48,6 +48,8 @@
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
     canvas.height = (window.innerHeight - 81);
+		ctx.fillStyle = '#ffffff';
+		ctx.fillRect(0, 0, canvas.width, canvas.height);
     if (squared_checkbox.checked) {
         ctx.lineCap = 'square';
         ctx.lineJoin = 'round';
