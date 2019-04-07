@@ -27,7 +27,9 @@
     <input id="width-value" type="range" min="2" max=100">
   </fieldset>
   <button onclick="clearboard(event)">Clear Board</button>
-  <p id="support">&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbspSupport & Feedback: <a href="mailto:victor@lfpost.dk">victor@lfpost.dk</a></p>
+	<button type="button" onclick="cUndo(event)">Undo</button>
+	<button type="button" onclick="cRedo(event)">Redo</button>
+  <p id="support"> &nbsp &nbsp &nbsp &nbspSupport & Feedback: <a href="mailto:victor@lfpost.dk">victor@lfpost.dk</a></p>
 	<button id="save-button"><a id="save">Save image</a></button>
 </form>
 <canvas id="draw" width="800" height="800"></canvas>
@@ -216,6 +218,7 @@
     canvas.addEventListener('mouseup', () => {
         isDrawing = false;
 				mouseDown = false;
+				cPush();
     });
 		canvas.addEventListener('mouseout', () => {
 		        isDrawing = false;
@@ -249,22 +252,60 @@
 
     ctx.shadowColor = color;
 		
-		//let link = document.querySelector('#save-button');
-		//let cnvs = document.getElementById('draw');
-		//link.addEventListener('click', function(ev) {
-		//	ev.preventDefault();
-		//	link.href = cnvs.toDataURL('image/jpeg', 1.0);
-		//	link.download = 'painting.jpg';
-		//	console.log("Successfully downloaded 'painting.jpg'!")
-		//}, false);
-		
 		var link = document.getElementById('save');
 		    link.innerHTML = 'Download Image';
 		link.addEventListener('click', function(ev) {
 		    link.href = canvas.toDataURL();
 		    link.download = "mypainting.png";
 		}, false);
-		//document.body.children[0].appendChild(link);
+		
+		var cPushArray = new Array();
+		var cStep = -1;
+		
+		function cPush() {
+		    cStep++;
+		    if (cStep < cPushArray.length) { cPushArray.length = cStep; }
+		    cPushArray.push(document.getElementById('draw').toDataURL());
+				console.log("cPush() called!");
+		}
+		
+		function cUndo(event) {
+		    if (cStep > 0) {
+		        cStep--;
+		        var canvasPic = new Image();
+		        canvasPic.src = cPushArray[cStep];
+		        canvasPic.onload = function () { 
+							ctx.drawImage(canvasPic, 0, 0); 
+						}
+		    }
+				console.log("cUndo() called!");
+		}
+		
+		function cRedo(event) {
+		    if (cStep < cPushArray.length-1) {
+		        cStep++;
+		        var canvasPic = new Image();
+		        canvasPic.src = cPushArray[cStep];
+		        canvasPic.onload = function () { 
+							ctx.drawImage(canvasPic, 0, 0); 
+						}
+		    }
+				console.log("cRedo() called!");
+		}
+		
+		function drawImage() {
+		    var image = new Image();
+		    image.src = 'myimg.jpg';
+		    $(image).load(function () {
+		        ctx.drawImage(image, 0, 0, 500, 200);
+		        cPush();
+		    });
+				console.log("drawImage() called!");    
+		}
+		
+		cPush(MouseEvent);
+		
+
 
 </script>
 
@@ -286,10 +327,15 @@
     font-size: 35px;
   }
 	
+	.undo-redo {
+		margin-top: 8px;
+		
+	}
+	
 	#save-button {
 		position: absolute;
 		right: 10px;
-		margin-top: 10px;
+		margin-top: 8px;
 	}
 	
 	#save {
