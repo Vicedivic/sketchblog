@@ -27,8 +27,8 @@
     <input id="width-value" type="range" min="2" max=100">
   </fieldset>
   <button onclick="clearboard(event)">Clear Board</button>
-	<button type="button" onclick="cUndo(event)">Undo</button>
-	<button type="button" onclick="cRedo(event)">Redo</button>
+	<!--<button type="button" onclick="cUndo(event)">Undo</button>
+	<button type="button" onclick="cRedo(event)">Redo</button>-->
   <p id="support"> &nbsp &nbsp &nbsp &nbspSupport & Feedback: <a href="mailto:victor@lfpost.dk">victor@lfpost.dk</a></p>
 	<button id="save-button"><a id="save">Save image</a></button>
 </form>
@@ -248,6 +248,7 @@
         e.preventDefault()
         ctx.clearRect(0, 0, $canvas.width(), $canvas.height());
         console.log($form.height(), $canvas.width(), $canvas.height());
+				cPush(MouseEvent);
     }
 
     ctx.shadowColor = color;
@@ -305,7 +306,25 @@
 		
 		cPush(MouseEvent);
 		
-
+		document.onkeydown = function(e) {
+			if (e.which == 90 && (e.ctrlKey || e.metaKey) && e.shiftKey) {
+				cRedo(e);
+			} else if (e.which == 90 && (e.ctrlKey || e.metaKey)) {
+				cUndo(e);
+			}
+		}
+		
+		/* jQuery(document).keydown(function(event) {
+		        // If Control or Command key is pressed and the S key is pressed
+		        // run save function. 83 is the key code for S.
+		        if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.which = 90) {
+		            // Save Function
+							cRedo(KeyboardEvent);
+		        } else if ((event.ctrlKey || event.metaKey) && event.which = 90) {
+		        	cUndo(KeyboardEvent);
+		        }
+		    }
+		); */
 
 </script>
 
