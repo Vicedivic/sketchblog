@@ -29,8 +29,8 @@
   <button onclick="clearboard(event)">Clear Board</button>
 	<!--<button type="button" onclick="cUndo(event)">Undo</button>
 	<button type="button" onclick="cRedo(event)">Redo</button>-->
-  <p id="support"> &nbsp &nbsp &nbsp &nbspSupport & Feedback: <a href="mailto:victor@lfpost.dk">victor@lfpost.dk</a></p>
-	<button id="save-button"><a id="save">Save image</a></button>
+  
+	<button id="save-button"><a id="save"><img id="download-img" src="download.jpg" alt="Download image"></a></button>
 </form>
 <canvas id="draw" width="800" height="800"></canvas>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -50,6 +50,7 @@
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
     canvas.height = (window.innerHeight - 81);
+		
 		ctx.fillStyle = '#ffffff';
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
     if (squared_checkbox.checked) {
@@ -325,6 +326,21 @@
 		        }
 		    }
 		); */
+			
+			/*window.onresize = function() {
+		    canvas.width = window.innerWidth;
+		    canvas.height = (window.innerHeight - 81);
+				
+		    if (squared_checkbox.checked) {
+		        ctx.lineCap = 'square';
+		        ctx.lineJoin = 'round';
+		    } else {
+		        ctx.lineCap = 'round';
+		        ctx.lineJoin = 'round';
+		    }
+				cPush(MouseEvent);
+				cRedo(MouseEvent);
+			}*/
 
 </script>
 
@@ -433,6 +449,10 @@
   .invisible {
     visibility: hidden;
   }
+	
+	#download-img {
+		
+	}
 
 
 </style>
